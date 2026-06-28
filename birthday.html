@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0;  }
+
+:root {
+  --cream: #FAF8F4;
+  --ink: #1C1B18;
+  --ink-soft: #5A574F;
+  --ink-muted: #9A9690;
+  --gold: #C8A96E;
+  --gold-light: #EFE4CC;
+  --border: rgba(0,0,0,0.08);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-x: hidden;
+}
+
+/* HERO */
+.hero {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 1.5rem;
+  text-align: center;
+  position: relative;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(200,169,110,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.eyebrow {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  animation: fadeUp 0.7s 0.1s forwards;
+}
+
+.hero-name {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(52px, 10vw, 96px);
+  font-weight: 400;
+  line-height: 1.05;
+  color: var(--ink);
+  margin-bottom: 0.5rem;
+  opacity: 0;
+  animation: fadeUp 0.7s 0.25s forwards;
+}
+
+.hero-sub {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: clamp(18px, 3.5vw, 28px);
+  color: var(--ink-soft);
+  margin-bottom: 3rem;
+  opacity: 0;
+  animation: fadeUp 0.7s 0.4s forwards;
+}
+
+.scroll-hint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink-muted);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  opacity: 0;
+  animation: fadeUp 0.7s 0.9s forwards;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.scroll-hint svg { animation: bounce 2s ease-in-out infinite; }
+
+/* CARD SECTION */
+.card-section {
+  width: 100%;
+  max-width: 680px;
+  padding: 5rem 1.5rem 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.5rem;
+}
+
+.section-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  color: var(--gold);
+  text-transform: uppercase;
+  text-align: center;
+}
+
+/* CARD */
+.card-wrap {
+  perspective: 1200px;
+  width: 100%;
+  max-width: 380px;
+}
+
+.card {
+  width: 100%;
+  height: 480px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card.open { transform: rotateY(180deg); }
+
+.card-face {
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 2rem;
+  border: 1px solid var(--border);
+}
+
+.card-front { background: #fff; }
+.card-back {
+  background: var(--ink);
+  transform: rotateY(180deg);
+}
+
+.front-ornament { width: 56px; height: 1px; background: var(--gold); margin-bottom: 2rem; }
+
+.front-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 32px;
+  font-weight: 400;
+  color: var(--ink);
+  text-align: center;
+  margin-bottom: 0.75rem;
+  line-height: 1.2;
+}
+
+.front-date {
+  font-size: 13px;
+  color: var(--ink-muted);
+  letter-spacing: 0.08em;
+  margin-bottom: 2.5rem;
+}
+
+.front-ornament-b { width: 56px; height: 1px; background: var(--gold-light); margin-bottom: 2rem; }
+
+/* BUTTON AREA */
+.btn-zone {
+  position: relative;
+  width: 100%;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.open-btn {
+  position: absolute;
+  padding: 10px 28px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.15);
+  border-radius: 100px;
+  cursor: pointer;
+  transition: transform 0.18s, opacity 0.18s;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.open-btn:hover { background: var(--cream); }
+.open-btn.fled { transition: transform 0.22s cubic-bezier(0.2,0,0.5,1); }
+.open-btn.done {
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
+}
+.open-btn.done:hover { opacity: 0.85; }
+
+/* ATTEMPT COUNTER */
+.attempt-msg {
+  font-size: 13px;
+  color: var(--ink-muted);
+  text-align: center;
+  min-height: 20px;
+  transition: opacity 0.3s;
+}
+
+/* BACK FACE */
+.back-label {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+}
+
+.back-msg {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 20px;
+  color: #fff;
+  text-align: center;
+  line-height: 1.8;
+  margin-bottom: 2.5rem;
+}
+
+.back-line { width: 40px; height: 1px; background: rgba(200,169,110,0.5); margin-bottom: 1.5rem; }
+
+.back-from {
+  font-size: 13px;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 0.06em;
+}
+
+.back-from strong { color: rgba(255,255,255,0.85); font-weight: 400; }
+
+/* WISHES */
+.wishes {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+.wish-item {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.25rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.wish-icon { font-size: 22px; }
+.wish-title { font-size: 14px; font-weight: 500; color: var(--ink); }
+.wish-desc { font-size: 12px; color: var(--ink-muted); line-height: 1.6; }
+
+/* FOOTER */
+footer { padding: 3rem 1.5rem; text-align: center; }
+
+.footer-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  color: var(--ink);
+  margin-bottom: 0.5rem;
+}
+
+.footer-note { font-size: 12px; color: var(--ink-muted); letter-spacing: 0.06em; }
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(6px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+@media (max-width: 480px) {
+  .card { height: 460px; }
+  .back-msg { font-size: 17px; }
+}
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <p class="eyebrow">Happy Birthday</p>
+  <h1 class="hero-name">สมศรี</h1>
+  <p class="hero-sub">วันพิเศษที่สุดของปี</p>
+  <button class="scroll-hint" onclick="document.querySelector('.card-section').scrollIntoView({behavior:'smooth'})">
+    <span>เปิดการ์ด</span>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path d="M8 3v10M3 9l5 5 5-5" stroke="#9A9690" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+</section>
+
+<section class="card-section">
+  <p class="section-label">การ์ดวันเกิด</p>
+
+  <div class="card-wrap">
+    <div class="card" id="card">
+      <div class="card-face card-front">
+        <div class="front-ornament"></div>
+        <p class="front-title">Happy<br>Birthday<br>สมศรี</p>
+        <p class="front-date">27 มิถุนายน 2569</p>
+        <div class="front-ornament-b"></div>
+
+        <div class="btn-zone">
+          <button class="open-btn" id="openBtn">เปิดการ์ด</button>
+        </div>
+      </div>
+
+      <div class="card-face card-back">
+        <p class="back-label">ข้อความถึงคุณ</p>
+        <p class="back-msg">
+          ขอให้ทุกความฝัน<br>
+          เป็นจริงในวันนี้<br>
+          และทุก ๆ วัน<br>
+          ที่ผ่านมา
+        </p>
+        <div class="back-line"></div>
+        <p class="back-from">ด้วยความรักจาก <strong>ทุกคน</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <p class="attempt-msg" id="attemptMsg">&nbsp;</p>
+
+  <div class="wishes">
+    <div class="wish-item">
+      <div class="wish-icon">🌟</div>
+      <p class="wish-title">ความสุข</p>
+      <p class="wish-desc">ขอให้ทุกวันเต็มไปด้วยรอยยิ้มและความอบอุ่น</p>
+    </div>
+    <div class="wish-item">
+      <div class="wish-icon">💫</div>
+      <p class="wish-title">ความฝัน</p>
+      <p class="wish-desc">ขอให้ทุกสิ่งที่ตั้งใจไว้สำเร็จดั่งใจหมาย</p>
+    </div>
+    <div class="wish-item">
+      <div class="wish-icon">🌸</div>
+      <p class="wish-title">สุขภาพ</p>
+      <p class="wish-desc">ขอให้แข็งแรง มีพลัง พร้อมรับทุกสิ่งในชีวิต</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p class="footer-name">สมศรี</p>
+  <p class="footer-note">สุขสันต์วันเกิด · 27 มิถุนายน 2569</p>
+</footer>
+
+<script>
+const btn = document.getElementById('openBtn');
+const card = document.getElementById('card');
+const msg = document.getElementById('attemptMsg');
+const MAX_FLEE = 3;
+let attempts = 0;
+let fleeing = false;
+
+const taunts = [
+  'อย่าเพิ่งนะ... ลองอีกทีสิ 😏',
+  'เกือบแล้ว! แต่ยังไม่ถึงเวลา 🏃',
+  'โอเค โอเค... ครั้งนี้จริง ๆ แล้ว 🎉',
+];
+
+function getZoneRect() {
+  const zone = btn.closest('.btn-zone');
+  return zone.getBoundingClientRect();
+}
+
+function flee(e) {
+  if (fleeing) return;
+  fleeing = true;
+
+  const zone = btn.closest('.btn-zone').getBoundingClientRect();
+  const bw = btn.offsetWidth;
+  const bh = btn.offsetHeight;
+
+  const maxX = zone.width / 2 - bw / 2 - 10;
+  const maxY = zone.height / 2 - bh / 2 - 4;
+
+  const dx = (Math.random() * 2 - 1) * maxX;
+  const dy = (Math.random() * 2 - 1) * maxY;
+
+  btn.classList.add('fled');
+  btn.style.transform = `translate(${dx}px, ${dy}px)`;
+
+  attempts++;
+  msg.textContent = taunts[Math.min(attempts - 1, taunts.length - 1)];
+
+  if (attempts >= MAX_FLEE) {
+    btn.removeEventListener('mouseenter', flee);
+    btn.removeEventListener('touchstart', fleeTouch);
+    btn.classList.add('done');
+    btn.textContent = 'โอเค กดได้แล้ว 🎂';
+    btn.onclick = openCard;
+    msg.textContent = 'ตอนนี้พร้อมแล้ว กดได้เลย!';
+  }
+
+  setTimeout(() => { fleeing = false; }, 300);
+}
+
+function fleeTouch(e) {
+  e.preventDefault();
+  flee(e);
+}
+
+function openCard() {
+  card.classList.add('open');
+  msg.textContent = 'สุขสันต์วันเกิด! 🎂';
+}
+
+btn.addEventListener('mouseenter', flee);
+btn.addEventListener('touchstart', fleeTouch, { passive: false });
+</script>
+</body>
+</html>
