@@ -5,37 +5,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Happy Birthday</title>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&family=Inter:wght@300;400;500&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
-        *,
-        *::before,
-        *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=IBM+Plex+Sans+Thai:wght@100;200;300;400;500;600;700&display=swap');
 
         :root {
-            /* --bg: #F7F5F1; */
             --bg: #1A3263;
             --ink: #1A1916;
             --ink-soft: #58554D;
             --ink-muted: #e1d9cc;
             --gold: #FFC570;
-            --gold-light: #EFE4CC;
             --white: #FFFFFF;
-            --border: rgba(0, 0, 0, 0.09);
-            --border-strong: rgba(0, 0, 0, 0.15);
+            --border: rgba(0,0,0,0.09);
+            --border-strong: rgba(0,0,0,0.15);
             --accent: #2563EB;
-            --radius: 14px;
         }
 
-        html,
-        body {
+        html, body {
             min-height: 100vh;
             background: var(--bg);
             font-family: 'Inter', sans-serif;
@@ -43,7 +31,6 @@
             overflow-x: hidden;
         }
 
-        /* PAGE */
         .page {
             display: flex;
             flex-direction: column;
@@ -57,69 +44,111 @@
             text-align: center;
             margin-bottom: 4rem;
             animation: fadeUp 0.6s 0.1s both;
-            font-optical-sizing: auto;
-            font-weight: 600;
-            font-style: normal;
+        }
+        .handFont { font-family: "Caveat", cursive; font-weight: 600; }
+        .eyebrowedit { font-size: 11px; font-weight: 500; letter-spacing: 0.16em; color: #EFD2B0; margin-bottom: 0.75rem; }
+        .line { font-size: 1.25rem; margin: 10px 0; white-space: pre-wrap; color: #EFD2B0; }
+        .cursor { border-right: 2px solid #547792; animation: blink 0.7s step-end infinite; }
+        @keyframes blink { 50% { border-color: transparent; } }
+
+        /* MAIN CONTENT (hidden until typewriter done) */
+        #mainContent {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+            opacity: 0;
+            visibility: hidden;
+        }
+        #mainContent.revealed {
+            visibility: visible;
+            animation: fadeUp 0.7s ease forwards;
         }
 
-        .handFont {
-            font-family: "Caveat", cursive;
-            font-optical-sizing: auto;
-            font-weight: 600;
-            font-style: normal;
+        /* SCENE HINT */
+        .scene-hint {
+            font-size: 13px;
+            color: var(--ink-muted);
+            text-align: center;
+            margin-bottom: 0.5rem;
+            min-height: 20px;
         }
 
-        .eyebrow {
-            font-size: 11px;
-            font-weight: 500;
-            letter-spacing: 0.16em;
-            color: #EFD2B0;
-            text-transform: uppercase;
-            margin-bottom: 0.75rem;
+        /* CARD / FRAME */
+        .card { text-align: center; margin: 20px auto; width: 320px; }
+
+        .frame {
+            position: relative;
+            display: inline-block;
+            border: 6px solid #FFC570;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            background: #000;
+            width: 100%;
         }
 
-        .eyebrowedit {
-            font-size: 11px;
-            font-weight: 500;
-            letter-spacing: 0.16em;
-            color: #EFD2B0;
-            margin-bottom: 0.75rem;
+        .frame img, .frame video {
+            width: 100%;
+            display: block;
+            transition: opacity 0.5s ease;
         }
 
+        .frame img.fade-out { opacity: 0; }
+        .frame img.fade-in  { opacity: 1; }
 
-        .headline {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(40px, 9vw, 80px);
-            font-weight: 400;
-            line-height: 1.05;
-            color: var(--ink);
-            margin-bottom: 0.6rem;
+        /* ── VIDEO CARD (hidden by default) ── */
+        #videoCard {
+            text-align: center;
+            margin: 20px auto;
+            width: 320px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(24px);
+            transition: opacity 0.6s ease, transform 0.6s ease, visibility 0.6s;
         }
-
-        .sub {
-            font-size: 15px;
-            color: var(--ink-soft);
-            line-height: 1.6;
+        #videoCard.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
         }
+        #videoCard .scene-hint { margin-bottom: 0.5rem; }
 
-        .line {
-            font-size: 1.25rem;
-            margin: 10px 0;
-            white-space: pre-wrap;
+        /* BUTTONS */
+        .wish-btn {
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 100%;
+            padding: 12px 0;
+            font-size: 1.2rem;
+            background: rgba(84,119,146,0.9);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s;
         }
+        .wish-btn:hover { background: #1A3263; }
 
-        .cursor {
-            border-right: 2px solid #547792;
-            animation: blink 0.7s step-end infinite;
+        .candle-btn {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%; height: 25%;
+            font-size: 1.1rem;
+            background: rgba(84,119,146,0.85);
+            color: white;
+            opacity: 0;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            display: none;
+            transition: background 0.3s, transform 0.2s;
         }
+        .candle-btn:hover { background: rgba(26,50,99,0.95); transform: translate(-50%,-50%) scale(1.05); }
+        .candle-btn:disabled { opacity: 0.5; cursor: default; transform: translate(-50%,-50%) scale(1); }
 
-        @keyframes blink {
-            50% {
-                border-color: transparent;
-            }
-        }
-
-        /* MAIN STAGE */
+        /* FAN */
         .stage {
             display: flex;
             flex-direction: column;
@@ -127,448 +156,162 @@
             gap: 2.5rem;
             width: 100%;
             max-width: 480px;
-            animation: fadeUp 0.6s 0.25s both;
         }
+        .hint-text { font-size: 13px; color: var(--ink-muted); text-align: center; min-height: 20px; transition: color 0.3s; }
 
-        .hint-text {
-            font-size: 13px;
-            color: var(--ink-muted);
-            text-align: center;
-            min-height: 20px;
-            transition: color 0.3s;
-        }
-
-        /* FAN */
-        .fan-wrap {
-            position: relative;
-            width: 280px;
-            height: 320px;
-            cursor: pointer;
-        }
-
+        .fan-wrap { position: relative; width: 280px; height: 320px; cursor: pointer; }
         .fan-wrap .c {
             position: absolute;
-            bottom: 0;
-            left: 50%;
-            width: 120px;
-            margin-left: -60px;
-            height: 172px;
+            bottom: 0; left: 50%;
+            width: 120px; margin-left: -60px; height: 172px;
             border-radius: 14px;
             border: 0.5px solid var(--border-strong);
             background: var(--white);
             transform-origin: bottom center;
-            transition: transform 0.42s cubic-bezier(.4, 0, .2, 1), opacity 0.45s ease, box-shadow 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            gap: 8px;
+            transition: transform 0.42s cubic-bezier(.4,0,.2,1), opacity 0.45s ease, box-shadow 0.2s;
+            display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 8px;
             user-select: none;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
         }
+        .fan-wrap .c .c-icon { font-size: 32px; }
+        .fan-wrap .c .c-num { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; color: var(--ink-muted); }
 
-        .fan-wrap .c .c-icon {
-            font-size: 32px;
-        }
+        .fan-wrap.idle .c:nth-child(1) { transform: rotate(-32deg); z-index: 1; }
+        .fan-wrap.idle .c:nth-child(2) { transform: rotate(-16deg); z-index: 2; }
+        .fan-wrap.idle .c:nth-child(3) { transform: rotate(0deg);   z-index: 3; }
+        .fan-wrap.idle .c:nth-child(4) { transform: rotate(16deg);  z-index: 2; }
+        .fan-wrap.idle .c:nth-child(5) { transform: rotate(32deg);  z-index: 1; }
 
-        .fan-wrap .c .c-num {
-            font-size: 11px;
-            font-weight: 500;
-            letter-spacing: 0.1em;
-            color: var(--ink-muted);
-        }
+        .fan-wrap.spread .c:nth-child(1) { transform: rotate(-52deg) translateY(-22px); z-index: 1; }
+        .fan-wrap.spread .c:nth-child(2) { transform: rotate(-26deg) translateY(-12px); z-index: 2; }
+        .fan-wrap.spread .c:nth-child(3) { transform: rotate(0deg)   translateY(-7px);  z-index: 3; }
+        .fan-wrap.spread .c:nth-child(4) { transform: rotate(26deg)  translateY(-12px); z-index: 2; }
+        .fan-wrap.spread .c:nth-child(5) { transform: rotate(52deg)  translateY(-22px); z-index: 1; }
 
-        /* IDLE */
-        .fan-wrap.idle .c:nth-child(1) {
-            transform: rotate(-32deg);
-            z-index: 1;
-        }
-
-        .fan-wrap.idle .c:nth-child(2) {
-            transform: rotate(-16deg);
-            z-index: 2;
-        }
-
-        .fan-wrap.idle .c:nth-child(3) {
-            transform: rotate(0deg);
-            z-index: 3;
-        }
-
-        .fan-wrap.idle .c:nth-child(4) {
-            transform: rotate(16deg);
-            z-index: 2;
-        }
-
-        .fan-wrap.idle .c:nth-child(5) {
-            transform: rotate(32deg);
-            z-index: 1;
-        }
-
-        /* SPREAD */
-        .fan-wrap.spread .c:nth-child(1) {
-            transform: rotate(-52deg) translateY(-22px);
-            z-index: 1;
-        }
-
-        .fan-wrap.spread .c:nth-child(2) {
-            transform: rotate(-26deg) translateY(-12px);
-            z-index: 2;
-        }
-
-        .fan-wrap.spread .c:nth-child(3) {
-            transform: rotate(0deg) translateY(-7px);
-            z-index: 3;
-        }
-
-        .fan-wrap.spread .c:nth-child(4) {
-            transform: rotate(26deg) translateY(-12px);
-            z-index: 2;
-        }
-
-        .fan-wrap.spread .c:nth-child(5) {
-            transform: rotate(52deg) translateY(-22px);
-            z-index: 1;
-        }
-
-        .fan-wrap .c.read {
-            opacity: 0.22;
-            pointer-events: none;
-        }
-
+        .fan-wrap .c.read { opacity: 0.22; pointer-events: none; }
         .fan-wrap.spread .c:not(.read):hover {
-            box-shadow: 0 0 0 2.5px var(--accent), 0 4px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 0 2.5px var(--accent), 0 4px 20px rgba(0,0,0,0.1);
             z-index: 20 !important;
         }
 
         /* MSG CARD */
-        .msg-area {
-            width: 100%;
-        }
-
+        .msg-area { width: 100%; }
         .msg-card {
             background: var(--white);
             border: 0.5px solid var(--border-strong);
             border-radius: 18px;
             padding: 1.75rem 1.5rem 1.25rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            opacity: 0;
-            transform: translateY(14px);
+            display: flex; flex-direction: column; gap: 1rem;
+            opacity: 0; transform: translateY(14px);
             transition: opacity 0.38s ease, transform 0.38s ease;
             pointer-events: none;
         }
-
-        .msg-card.visible {
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: auto;
-        }
-
-        .msg-top {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
+        .msg-card.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+        .msg-top { display: flex; align-items: center; gap: 12px; }
         .msg-icon-wrap {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
+            width: 44px; height: 44px; border-radius: 50%;
             background: var(--bg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px; flex-shrink: 0;
         }
+        .msg-title { font-size: 16px; font-weight: 500; color: var(--ink); }
+        .msg-body { font-family: 'Playfair Display', serif; font-style: italic; font-size: 16px; color: var(--ink-soft); line-height: 1.85; }
+        .msg-from { font-size: 12px; color: var(--ink-muted); padding-top: 0.75rem; border-top: 0.5px solid var(--border); }
+        .pbar-wrap { margin-top: 0.25rem; height: 2px; background: rgba(0,0,0,0.07); border-radius: 2px; overflow: hidden; }
+        .pbar-fill { height: 100%; background: var(--gold); transform-origin: left; transform: scaleX(1); }
+        .progress { font-size: 13px; color: var(--ink-muted); text-align: center; min-height: 20px; transition: color 0.3s; }
+        .progress.done { color: var(--gold); font-weight: 500; }
 
-        .msg-title {
-            font-size: 16px;
-            font-weight: 500;
-            color: var(--ink);
-        }
-
-        .msg-body {
-            font-family: 'Playfair Display', serif;
-            font-style: italic;
-            font-size: 16px;
-            color: var(--ink-soft);
-            line-height: 1.85;
-        }
-
-        .msg-from {
-            font-size: 12px;
-            color: var(--ink-muted);
-            padding-top: 0.75rem;
-            border-top: 0.5px solid var(--border);
-        }
-
-        /* PROGRESS BAR */
-        .pbar-wrap {
-            margin-top: 0.25rem;
-            height: 2px;
-            background: rgba(0, 0, 0, 0.07);
-            border-radius: 2px;
-            overflow: hidden;
-        }
-
-        .pbar-fill {
-            height: 100%;
-            background: var(--gold);
-            transform-origin: left;
-            transform: scaleX(1);
-        }
-
-        /* STATUS */
-        .progress {
-            font-size: 13px;
-            color: var(--ink-muted);
-            text-align: center;
-            min-height: 20px;
-            transition: color 0.3s;
-        }
-
-        .progress.done {
-            color: var(--gold);
-            font-weight: 500;
-        }
-
-        /* FOOTER */
-        footer {
-            margin-top: 5rem;
-            text-align: center;
-            animation: fadeUp 0.6s 0.4s both;
-        }
-
-        .footer-name {
-            font-family: 'Playfair Display', serif;
-            font-size: 20px;
-            color: var(--ink);
-            margin-bottom: 0.4rem;
-        }
-
-        .footer-note {
-            font-size: 12px;
-            color: var(--ink-muted);
-            letter-spacing: 0.06em;
-        }
-
-        /* ANIMATIONS */
         @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(16px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
+
+        /* ── scene 3 : gift box ── */
+        #giftCard {
+            text-align: center;
+            margin: 20px auto;
+            width: 320px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(24px);
+            transition: opacity 0.6s ease, transform 0.6s ease, visibility 0.6s;
+        }
+        #giftCard.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        /* รูปในกล่องของขวัญ — คลิกได้ */
+        #giftImage {
+            cursor: pointer;
+            transition: transform 0.15s ease;
+        }
+        #giftImage:hover { transform: scale(1.03); }
+        #giftImage:active { transform: scale(0.97); }
 
         @media (prefers-reduced-motion: reduce) {
-
-            *,
-            *::before,
-            *::after {
-                animation: none !important;
-                transition: none !important;
-            }
+            *, *::before, *::after { animation: none !important; transition: none !important; }
         }
-
         @media (max-width: 420px) {
-            .fan-wrap {
-                width: 240px;
-                height: 280px;
-            }
-
-            .fan-wrap .c {
-                width: 104px;
-                margin-left: -52px;
-                height: 152px;
-            }
-        }
-
-
-        /* scene 1.1 */
-
-        .card {
-            text-align: center;
-            margin: 50px auto;
-            width: 320px;
-            opacity: 0;
-            /* เริ่มต้นโปร่งใส */
-            transform: translateY(50px);
-            /* เริ่มต้นเลื่อนลง */
-            animation: slideUp 1s ease-out forwards;
-            /* เรียก animation */
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .frame {
-            position: relative;
-            display: inline-block;
-            border: 6px solid #FFC570;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .frame img {
-            width: 100%;
-            display: block;
-        }
-
-        .wish-btn {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            /* ปุ่มกว้างเต็มรูป */
-            padding: 12px 0;
-            font-size: 1.2rem;
-            background: rgba(84, 119, 146, 0.9);
-            color: white;
-            border: none;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .wish-btn:hover {
-            background: #1A3263;
-        }
-
-        /* scene 1.2-1.3 */
-
-        .card2 {
-            text-align: center;
-            margin: 50px auto;
-            width: 320px;
-        }
-
-         .card3 {
-            text-align: center;
-            margin: 50px auto;
-            width: 320px;
-        }
-
-        .frame {
-            position: relative;
-            display: inline-block;
-            border: 6px solid #FFC570;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-            background: #000;
-            /* ป้องกันพื้นหลังขาว */
-
-        }
-
-        .frame img {
-            width: 100%;
-            display: block;
-            transition: opacity 0.5s ease;
-        }
-
-         .frame video {
-        width: 100%;
-        height: auto;
-        /* หรือใช้ height:100% + object-fit:cover */
-        display: block;
-    }
-
-        .fade-out {
-            opacity: 0.7;
-
-        }
-
-        .fade-in {
-            opacity: 1;
-        }
-
-        .candle-btn {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 80%;
-            height: 25%;
-            padding: 12px 0;
-            font-size: 1.2rem;
-            opacity: 0;
-            /* background: rgba(84, 119, 146, 0.6); โปร่งใส */
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: transform 0.2s, background 0.3s;
-        }
-
-        .candle-btn:hover {
-            transform: translate(-50%, -50%) scale(1.05);
-
-        }
-
-        @keyframes slideUp2 {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .card2 {
-            animation: slideUp2 0.8s ease-out forwards;
+            .fan-wrap { width: 240px; height: 280px; }
+            .fan-wrap .c { width: 104px; margin-left: -52px; height: 152px; }
         }
     </style>
 </head>
 
 <body>
+<div class="page">
 
-    <div class="page">
-        <!-- open -->
-        <div class="hero  eyebrowedit handFont" id="hero">
+    <!-- typewriter hero -->
+    <div class="hero eyebrowedit handFont" id="hero"></div>
+
+    <!-- main content (revealed after typewriter) -->
+    <div id="mainContent">
+
+        <!-- scene 1 : cake slideshow -->
+        <p class="scene-hint" id="sceneHint">click the button to make a wish!</p>
+        <div class="card">
+            <div class="frame">
+                <img id="cardImage" src="./src/image/P1.1.png" alt="Birthday Cake">
+                <button class="wish-btn" id="wishBtn" onclick="handleWishBtn()">✨ Make a Wish ✨</button>
+                <div class="candle-btn" id="candleBtn" onclick="changeImage()"></div>
+            </div>
         </div>
 
-        <!-- scene 1.1-1.4 -->
-        <div>
-            <p class="card hint-text" id="hint">click the button to make a wish!</p>
+        <audio id="hbd">
+            <source src="./src/audio/hbd.mp3" type="audio/mpeg">
+        </audio>
+
+        <!-- ── scene 2 : countdown video (hidden until slideshow done) ── -->
+        <div id="videoCard">
+            <p class="scene-hint" id="videoHint">🎉 And now... a little something for you!</p>
             <div class="card">
                 <div class="frame">
-                    <img src="./src/image/scene1-1.jpeg" alt="Birthday Cake">
-
-                    <button class="wish-btn" onclick="makeWish(); changeImage()">✨ Make a Wish ✨</button>
+                    <video id="countdownVideo" src="./src/image/countdown.mp4"
+                           controls playsinline preload="metadata">
+                    </video>
                 </div>
             </div>
-
-            <audio id="hbd">
-                <source src="./src/audio/hbd.mp3" type="audio/mpeg">
-            </audio>
         </div>
 
+        <!-- ── scene 3 : gift box (hidden until video ends) ── -->
+        <div id="giftCard">
+            <p class="scene-hint" id="giftHint">🎁 Here's a special gift for you! — tap to unwrap!</p>
+            <div class="card">
+                <div class="frame">
+                    <img id="giftImage" src="./src/image/gift_box.png" alt="Gift" onclick="unwrapGift()">
+                </div>
+            </div>
+        </div>
 
-        
-       
+          <!-- ── Happy Birthday message ── -->
+        <div id="bdMessage">
+            <p style="color: #FFC570;">Happy Birthday Dev ❤️</p>
+        </div>
 
-
-
-        <div class="stage">
+        <!-- fan cards -->
+        <div class="stage" style="margin-top: 2rem;">
             <p class="hint-text" id="hint">วางเมาส์เพื่อแผ่ไพ่ · เลือกไพ่เพื่ออ่านข้อความ</p>
 
             <div class="fan-wrap idle" id="fan" onmouseenter="spreadFan()" onmouseleave="foldFan()">
@@ -596,180 +339,211 @@
             <p class="progress" id="progress"></p>
         </div>
 
-        <!-- <footer>
-    <p class="footer-name">สมศรี</p>
-    <p class="footer-note">สุขสันต์วันเกิด · 27 มิถุนายน 2569</p>
-  </footer> -->
+    </div><!-- /#mainContent -->
+</div>
 
-    </div>
+<script>
+    // ─── Typewriter → reveal mainContent ────────────────────────────────────
+    const lines = [
+        "This year ...",
+        "29 June 2026",
+        "There is something I want to say to you!"
+    ];
+    let lineIdx = 0, charIdx = 0;
 
-    <script>
+    function typeWriter() {
+        if (lineIdx >= lines.length) { revealContent(); return; }
 
-        // scene 1.1
-        function makeWish() {
-
-
-            // เล่นเพลง HBD 3 รอบ
-            const audio = document.getElementById("hbd");
-            let count = 0;
-            audio.addEventListener("ended", () => {
-                count++;
-                if (count < 1) {
-                    audio.play();
-                }
-            });
-            audio.play();
-
-            
+        if (charIdx === 0) {
+            const p = document.createElement("p");
+            p.className = "line";
+            p.id = "line" + lineIdx;
+            document.getElementById("hero").appendChild(p);
         }
-         const images = ["./src/image/scene1-1.jpeg", "./src/image/P1.2.png", "./src/image/P1.3.png", "./src/image/P1.4.png"];
-        let current = 0;
 
-        function changeImage() {
+        const currentLine = document.getElementById("line" + lineIdx);
+        currentLine.innerHTML = lines[lineIdx].substring(0, charIdx + 1) + '<span class="cursor"></span>';
+        charIdx++;
+
+        if (charIdx < lines[lineIdx].length) {
+            setTimeout(typeWriter, 100);
+        } else {
+            currentLine.innerHTML = lines[lineIdx];
+            charIdx = 0; lineIdx++;
+            setTimeout(typeWriter, 1000);
+        }
+    }
+
+    function revealContent() {
+        document.getElementById("mainContent").classList.add("revealed");
+    }
+
+    typeWriter();
+
+    // ─── Scene 1 : image slideshow ──────────────────────────────────────────
+    const images = [
+        "./src/image/P1.1.jpeg",
+        "./src/image/P1.2.png",
+        "./src/image/P1.3.png",
+        "./src/image/P1.4.png"
+    ];
+    let current = 0;
+
+    function handleWishBtn() {
+        document.getElementById("hbd").play();
+        document.getElementById("wishBtn").style.display = "none";
+        document.getElementById("candleBtn").style.display = "block";
+        document.getElementById("sceneHint").textContent = "Click the candle to blow it out! Tap a few times to see the magic!";
+        changeImage();
+    }
+
+     function changeImage() {
+            if (current >= images.length - 1) return;
+
             const img = document.getElementById("cardImage");
-
-            // ถ้ายังไม่ถึงรูปสุดท้าย → ให้เปลี่ยน
-            if (current < images.length - 1) {
-                img.classList.add("fade-out");
-
-                setTimeout(() => {
-                    current++;
-                    img.src = images[current];
-
-                    img.classList.remove("fade-out");
-                    img.classList.add("fade-in");
-
-                    setTimeout(() => {
-                        img.classList.remove("fade-in");
-                    }, 500);
-                }, 500);
-            } else {
-                // ถ้าถึงรูปสุดท้ายแล้ว → ปิดปุ่มไม่ให้กดอีก
-                document.querySelector(".candle-btn").disabled = true;
-                document.querySelector(".candle-btn").innerText = "🎉 Candles Out!";
-            }
-        }
-
-        // scene 1.2-1.3
-       
-
-
-
-
-
-        const CARDS = [
-            { icon: '🎂', title: 'วันเกิด', body: 'ขอให้ทุกความฝัน\nเป็นจริงในวันนี้\nและทุก ๆ วัน', from: 'ด้วยความรักจาก ทุกคน' },
-            { icon: '🌸', title: 'ความรัก', body: 'ขอให้ชีวิต\nเต็มไปด้วยรอยยิ้ม\nและผู้คนที่รักคุณ', from: 'จากใจ' },
-            { icon: '✨', title: 'ความฝัน', body: 'ทุกสิ่งที่ตั้งใจ\nขอให้สำเร็จ\nดั่งใจหมาย', from: 'เชื่อในตัวเอง' },
-            { icon: '🌟', title: 'ความสุข', body: 'ขอให้แข็งแรง\nมีพลัง และมีความสุข\nทุกวันตลอดปี', from: 'สุขสันต์วันเกิด' },
-            { icon: '🎁', title: 'ของขวัญ', body: 'ของขวัญที่ดีที่สุด\nคือการที่คุณมีอยู่\nในชีวิตของพวกเรา', from: 'รักคุณเสมอ' },
-        ];
-
-        const READ_DELAY = 4000;
-        let busy = false;
-        let readCount = 0;
-
-        const fan = document.getElementById('fan');
-        const msgCard = document.getElementById('msgCard');
-        const msgIcon = document.getElementById('msgIcon');
-        const msgTitle = document.getElementById('msgTitle');
-        const msgBody = document.getElementById('msgBody');
-        const msgFrom = document.getElementById('msgFrom');
-        const pFill = document.getElementById('pFill');
-        const progress = document.getElementById('progress');
-        const hint = document.getElementById('hint');
-
-        function spreadFan() { fan.classList.replace('idle', 'spread'); }
-        function foldFan() { if (!busy) fan.classList.replace('spread', 'idle'); }
-
-        function pick(i) {
-            if (busy) return;
-            const cardEls = fan.querySelectorAll('.c');
-            const el = cardEls[i];
-            if (el.classList.contains('read')) return;
-
-            busy = true;
-            fan.classList.replace('spread', 'idle');
-            hint.textContent = 'กำลังเปิดการ์ด…';
-
-            const d = CARDS[i];
-            msgIcon.textContent = d.icon;
-            msgTitle.textContent = d.title;
-            msgBody.innerHTML = d.body.replace(/\n/g, '<br>');
-            msgFrom.textContent = d.from;
-
-            // show card
-            msgCard.classList.add('visible');
-
-            // progress bar animate
-            pFill.style.transition = 'none';
-            pFill.style.transform = 'scaleX(1)';
-            requestAnimationFrame(() => requestAnimationFrame(() => {
-                pFill.style.transition = `transform ${READ_DELAY}ms linear`;
-                pFill.style.transform = 'scaleX(0)';
-            }));
+            img.classList.add("fade-out");
 
             setTimeout(() => {
-                // mark card as read
-                el.classList.add('read');
-                readCount++;
+                current++;
+                img.src = images[current];
+                img.classList.remove("fade-out");
+                img.classList.add("fade-in");
+                setTimeout(() => img.classList.remove("fade-in"), 500);
 
-                // hide msg
-                msgCard.classList.remove('visible');
+                // ── รูปสุดท้าย → รอเพลง HBD จบก่อน แล้ว fade video เข้ามา ──
+                if (current >= images.length - 1) {
+                    document.getElementById("candleBtn").style.display = "none";
+                    document.getElementById("sceneHint").textContent = "🎂 HBD!";
 
-                const left = CARDS.length - readCount;
-                if (left > 0) {
-                    progress.textContent = `เปิดแล้ว ${readCount} ใบ · เหลืออีก ${left} ใบ`;
-                    hint.textContent = 'วางเมาส์เพื่อแผ่ไพ่ · เลือกไพ่เพื่ออ่านข้อความ';
-                } else {
-                    progress.textContent = 'เปิดครบทุกใบแล้ว 🎂 สุขสันต์วันเกิด!';
-                    progress.classList.add('done');
-                    hint.textContent = '';
-                }
-                busy = false;
-            }, READ_DELAY);
+                    const audio = document.getElementById("hbd");
+
+                    function showVideo() {
+                        const vc = document.getElementById("videoCard");
+                        if(vc) {
+                            vc.classList.add("visible");
+                            
+                            // auto-play video
+                            const vid = document.getElementById("countdownVideo");
+                            if(vid) {
+                                vid.play().catch(() => {});
+                                // รอ video จบ → แสดง giftCard
+                                vid.addEventListener("ended", showGift, { once: true });
+                            }
+
+                            // scroll ไปที่ video
+                            vc.scrollIntoView({ behavior: "smooth", block: "start" });
+                        }
+                    }
+
+                    function showGift() {
+                        const gc = document.getElementById("giftCard");
+                        if(gc) {
+                            gc.classList.add("visible");
+                            gc.scrollIntoView({ behavior: "smooth", block: "start" });
+                        }
+                    }
+
+                    if (audio.paused || audio.ended) {
+                        // เพลงหยุดแล้ว (กรณี edge) → แสดงเลย
+                        showVideo();
+                    } else {
+                        // รอ event ended → แสดง
+                        audio.addEventListener("ended", showVideo, { once: true });
+                    }
+                } 
+                // ปิดวงเล็บของ setTimeout ให้ตรงกับเปิดด้านบน
+            }, 500);
         }
-    </script>
 
-    <script>
-        const lines = [
-            "This year ...",
-            "29 June 2026",
-            "There is something I want to say to you!"
-        ];
+    // ─── Scene 3 : unwrap gift ───────────────────────────────────────────────
+    let unwrapped = false;
 
-        let i = 0; // บรรทัด
-        let j = 0; // ตัวอักษร
-        let speed = 100; // ความเร็วพิมพ์ (ms)
+    function unwrapGift() {
+        if (unwrapped) return;
+        unwrapped = true;
 
-        function typeWriter() {
-            if (i < lines.length) {
-                // ถ้ายังไม่มีบรรทัดนี้ → สร้าง <p>
-                if (j === 0) {
-                    const p = document.createElement("p");
-                    p.className = "line";
-                    p.id = "line" + i;
-                    document.getElementById("hero").appendChild(p);
-                }
+        const img = document.getElementById("giftImage");
+        img.classList.add("fade-out");
 
-                const currentLine = document.getElementById("line" + i);
-                currentLine.innerHTML = lines[i].substring(0, j + 1) + '<span class="cursor"></span>';
-                j++;
+        setTimeout(() => {
+            img.src = "./src/image/art_toy.png";
+            img.alt = "Art Toy";
+            img.classList.remove("fade-out");
+            img.classList.add("fade-in");
+            setTimeout(() => img.classList.remove("fade-in"), 500);
 
-                if (j < lines[i].length) {
-                    setTimeout(typeWriter, speed);
-                } else {
-                    // พิมพ์บรรทัดเสร็จ → ลบ cursor แล้วไปบรรทัดใหม่
-                    currentLine.innerHTML = lines[i];
-                    j = 0;
-                    i++;
-                    setTimeout(typeWriter, 1000); // หน่วงก่อนขึ้นบรรทัดใหม่
-                }
+            document.getElementById("giftHint").textContent = "🎨 Surprise! 🎉";
+            img.style.cursor = "default";
+        }, 400);
+    }
+
+    // ─── Fan cards ──────────────────────────────────────────────────────────
+    const CARDS = [
+        { icon: '🎂', title: 'วันเกิด',  body: 'ขอให้ทุกความฝัน\nเป็นจริงในวันนี้\nและทุก ๆ วัน',        from: 'Mom' },
+        { icon: '🌸', title: 'ความรัก',  body: 'ขอให้ชีวิต\nเต็มไปด้วยรอยยิ้ม\nและผู้คนที่รักคุณ',      from: 'Dad' },
+        { icon: '✨', title: 'ความฝัน',  body: 'ทุกสิ่งที่ตั้งใจ\nขอให้สำเร็จ\nดั่งใจหมาย',             from: 'Gigi' },
+        { icon: '🌟', title: 'ความสุข',  body: 'ขอให้แข็งแรง\nมีพลัง และมีความสุข\nทุกวันตลอดปี',       from: 'Jennie' },
+        { icon: '🎁', title: 'ของขวัญ', body: 'ของขวัญที่ดีที่สุด\nคือการที่คุณมีอยู่\nในชีวิตของพวกเรา', from: 'Janjao' },
+    ];
+
+    const READ_DELAY = 4000;
+    let busy = false, readCount = 0;
+
+    const fan      = document.getElementById('fan');
+    const msgCard  = document.getElementById('msgCard');
+    const msgIcon  = document.getElementById('msgIcon');
+    const msgTitle = document.getElementById('msgTitle');
+    const msgBody  = document.getElementById('msgBody');
+    const msgFrom  = document.getElementById('msgFrom');
+    const pFill    = document.getElementById('pFill');
+    const progress = document.getElementById('progress');
+    const hint     = document.getElementById('hint');
+
+    function spreadFan() { fan.classList.replace('idle', 'spread'); }
+    function foldFan()   { if (!busy) fan.classList.replace('spread', 'idle'); }
+
+    function pick(i) {
+        if (busy) return;
+        const cardEls = fan.querySelectorAll('.c');
+        const el = cardEls[i];
+        if (el.classList.contains('read')) return;
+
+        busy = true;
+        fan.classList.replace('spread', 'idle');
+        hint.textContent = 'Opening…';
+
+        const d = CARDS[i];
+        msgIcon.textContent  = d.icon;
+        msgTitle.textContent = d.title;
+        msgBody.innerHTML    = d.body.replace(/\n/g, '<br>');
+        msgFrom.textContent  = d.from;
+
+        msgCard.classList.add('visible');
+
+        pFill.style.transition = 'none';
+        pFill.style.transform  = 'scaleX(1)';
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+            pFill.style.transition = `transform ${READ_DELAY}ms linear`;
+            pFill.style.transform  = 'scaleX(0)';
+        }));
+
+        setTimeout(() => {
+            el.classList.add('read');
+            readCount++;
+            msgCard.classList.remove('visible');
+
+            const left = CARDS.length - readCount;
+            if (left > 0) {
+                progress.textContent = `Opened ${readCount} cards · ${left} left`;
+                hint.textContent     = 'Hover to spread cards · Click a card to read its message';
+            } else {
+                progress.textContent = 'Opened all cards 🎂 Happy Birthday!';
+                progress.classList.add('done');
+                hint.textContent = '';
             }
-        }
-
-        typeWriter();
-    </script>
+            busy = false;
+        }, READ_DELAY);
+    }
+</script>
 </body>
-
 </html>
